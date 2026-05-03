@@ -1,0 +1,135 @@
+{
+  "source": "WHO Model List of Essential Medicines for Children 2023 / IMCI Drug Dosage Tables",
+  "note": "All dosages are guidelines. Adjust based on local formulary and patient-specific factors.",
+  "drugs": {
+    "amoxicillin": {
+      "class": "Aminopenicillin",
+      "indications": ["Pneumonia (non-severe)", "Bacterial sinusitis", "Otitis media"],
+      "formulations": [
+        "125mg/5ml suspension",
+        "250mg/5ml suspension",
+        "250mg capsule",
+        "500mg capsule"
+      ],
+      "dosing": {
+        "pediatric": {
+          "dose_mg_per_kg": 40,
+          "max_dose_mg": 1500,
+          "frequency": "twice daily",
+          "duration_days": 5,
+          "weight_table": [
+            {"weight_kg": "3-5", "dose": "125mg", "volume_125": "5ml", "volume_250": "2.5ml"},
+            {"weight_kg": "6-9", "dose": "250mg", "volume_125": "10ml", "volume_250": "5ml"},
+            {"weight_kg": "10-14", "dose": "375mg", "volume_125": "15ml", "volume_250": "7.5ml"},
+            {"weight_kg": "15-19", "dose": "500mg", "volume_250": "10ml", "tablets_500": "1"},
+            {"weight_kg": "20-29", "dose": "500mg", "volume_250": "10ml", "tablets_500": "1"},
+            {"weight_kg": ">=30", "dose": "500-1000mg", "tablets_500": "1-2"}
+          ]
+        },
+        "adult": {
+          "dose": "500mg-1g",
+          "frequency": "three times daily",
+          "duration_days": 7
+        }
+      }
+    },
+    "ampicillin": {
+      "class": "Aminopenicillin (parenteral)",
+      "indications": ["Severe pneumonia", "Meningitis", "Sepsis"],
+      "formulations": ["500mg vial for injection", "1g vial for injection"],
+      "dosing": {
+        "pediatric": {
+          "dose_mg_per_kg": 50,
+          "frequency": "every 6 hours",
+          "route": "IV or IM",
+          "weight_table": [
+            {"weight_kg": "3-5", "dose": "200mg"},
+            {"weight_kg": "6-9", "dose": "400mg"},
+            {"weight_kg": "10-14", "dose": "600mg"},
+            {"weight_kg": "15-19", "dose": "800mg"},
+            {"weight_kg": ">=20", "dose": "1000mg"}
+          ]
+        },
+        "adult": {
+          "dose": "1-2g",
+          "frequency": "every 6 hours",
+          "route": "IV"
+        }
+      }
+    },
+    "gentamicin": {
+      "class": "Aminoglycoside",
+      "indications": ["Severe pneumonia (with ampicillin)", "Neonatal sepsis"],
+      "formulations": ["40mg/ml injection", "10mg/ml injection (pediatric)"],
+      "dosing": {
+        "pediatric": {
+          "dose_mg_per_kg": 7.5,
+          "frequency": "once daily",
+          "route": "IV or IM",
+          "caution": "Monitor renal function. Reduce dose if renal impairment.",
+          "weight_table": [
+            {"weight_kg": "3-5", "dose": "30mg"},
+            {"weight_kg": "6-9", "dose": "50mg"},
+            {"weight_kg": "10-14", "dose": "90mg"},
+            {"weight_kg": "15-19", "dose": "120mg"},
+            {"weight_kg": ">=20", "dose": "150mg"}
+          ]
+        },
+        "adult": {
+          "dose": "5-7mg/kg",
+          "frequency": "once daily",
+          "route": "IV"
+        }
+      }
+    },
+    "furosemide": {
+      "class": "Loop diuretic",
+      "indications": ["Pulmonary edema", "Heart failure", "Pleural effusion (transudative)"],
+      "formulations": ["20mg/2ml injection", "40mg tablet"],
+      "dosing": {
+        "pediatric": {
+          "dose_mg_per_kg": 1,
+          "max_dose_mg": 40,
+          "frequency": "once or twice daily",
+          "route": "oral or IV"
+        },
+        "adult": {
+          "mild": {"dose": "20-40mg", "frequency": "once daily", "route": "oral"},
+          "moderate": {"dose": "40-80mg", "frequency": "once or twice daily", "route": "oral or IV"},
+          "severe": {"dose": "80-120mg", "frequency": "stat IV, repeat in 2h if needed"}
+        }
+      }
+    },
+    "enalapril": {
+      "class": "ACE inhibitor",
+      "indications": ["Hypertension", "Heart failure", "Cardiomegaly"],
+      "formulations": ["5mg tablet", "10mg tablet", "20mg tablet"],
+      "dosing": {
+        "adult": {
+          "start": "5mg once daily",
+          "target": "10-20mg twice daily",
+          "max": "40mg/day",
+          "caution": "Check renal function and potassium before starting and after 1-2 weeks"
+        }
+      }
+    },
+    "ceftriaxone": {
+      "class": "Third-generation cephalosporin",
+      "indications": ["Severe pneumonia (alternative)", "Meningitis", "Sepsis"],
+      "formulations": ["250mg vial", "1g vial", "2g vial"],
+      "dosing": {
+        "pediatric": {
+          "dose_mg_per_kg": 50,
+          "max_dose_mg": 2000,
+          "frequency": "once daily",
+          "route": "IV or IM"
+        },
+        "adult": {
+          "dose": "1-2g",
+          "frequency": "once daily",
+          "route": "IV or IM"
+        }
+      }
+    }
+  }
+}

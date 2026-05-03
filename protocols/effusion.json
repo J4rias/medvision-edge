@@ -1,0 +1,106 @@
+{
+  "condition": "Pleural Effusion",
+  "icd10": "J90",
+  "source": "WHO Clinical Guidelines / BTS Pleural Disease Guidelines 2023",
+  "description": "Abnormal accumulation of fluid in the pleural space, visible on chest X-ray as meniscus sign or opacification",
+  "classification": {
+    "mild": {
+      "criteria": [
+        "Small effusion: blunting of costophrenic angle only",
+        "Estimated volume <500ml",
+        "No respiratory distress"
+      ],
+      "label": "Small pleural effusion — investigate cause"
+    },
+    "moderate": {
+      "criteria": [
+        "Moderate effusion: fluid level above diaphragm, partial lung opacification",
+        "Estimated volume 500-1500ml",
+        "Mild dyspnea on exertion"
+      ],
+      "label": "Moderate pleural effusion — treat and consider drainage"
+    },
+    "severe": {
+      "criteria": [
+        "Large effusion: near-complete or complete opacification of hemithorax",
+        "Estimated volume >1500ml",
+        "Significant dyspnea, tachypnea, hypoxia",
+        "Mediastinal shift"
+      ],
+      "label": "Large pleural effusion — urgent drainage"
+    }
+  },
+  "common_causes": {
+    "transudative": [
+      "Congestive heart failure (most common)",
+      "Liver cirrhosis (hepatic hydrothorax)",
+      "Nephrotic syndrome",
+      "Hypoalbuminemia"
+    ],
+    "exudative": [
+      "Pneumonia / parapneumonic effusion",
+      "Tuberculosis (very common in endemic areas)",
+      "Malignancy (lung, breast, lymphoma)",
+      "Pulmonary embolism"
+    ]
+  },
+  "treatment": {
+    "mild": {
+      "setting": "outpatient",
+      "actions": [
+        "Identify and treat underlying cause",
+        "If heart failure: diuretics (furosemide 20-40mg daily)",
+        "If suspected TB: sputum testing, start TB workup",
+        "Follow-up X-ray in 2-4 weeks"
+      ]
+    },
+    "moderate": {
+      "setting": "primary care / district hospital",
+      "actions": [
+        "Diagnostic thoracentesis if cause unclear",
+        "Fluid analysis: protein, LDH, cell count, gram stain, AFB, cytology",
+        "Light's criteria to differentiate transudate vs exudate",
+        "Therapeutic drainage if symptomatic",
+        "Treat underlying cause"
+      ],
+      "medications": {
+        "heart_failure": {
+          "drug": "Furosemide",
+          "dose": "40-80mg",
+          "frequency": "daily",
+          "route": "oral or IV"
+        },
+        "infection": {
+          "drug": "Antibiotics per local protocol",
+          "note": "Cover typical and atypical organisms"
+        },
+        "tuberculosis": {
+          "note": "Start standard TB regimen (2HRZE/4HR) if TB confirmed"
+        }
+      }
+    },
+    "severe": {
+      "setting": "hospital",
+      "actions": [
+        "Urgent therapeutic thoracentesis or chest tube drainage",
+        "Do not drain >1500ml in first session (risk of re-expansion pulmonary edema)",
+        "Oxygen therapy to maintain SpO2 >=94%",
+        "Investigate for malignancy if recurrent",
+        "Refer to specialist for chest tube / pleurodesis if needed"
+      ]
+    }
+  },
+  "referral": {
+    "immediate": [
+      "Massive effusion with respiratory failure",
+      "Suspected empyema (purulent fluid, fever, sepsis)",
+      "Tension hydrothorax with mediastinal shift",
+      "Hemothorax (post-trauma)"
+    ],
+    "within_1_week": [
+      "Undiagnosed exudative effusion (rule out malignancy/TB)",
+      "Recurrent effusion despite treatment",
+      "Need for diagnostic thoracentesis not available locally"
+    ]
+  }
+}

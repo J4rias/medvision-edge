@@ -1,0 +1,122 @@
+{
+  "condition": "Pulmonary Edema",
+  "icd10": "J81",
+  "source": "WHO Clinical Guidelines / ESC Heart Failure Guidelines 2023",
+  "description": "Fluid accumulation in the lungs visible on chest X-ray as interstitial or alveolar opacities, Kerley B lines, peribronchial cuffing, or butterfly pattern",
+  "classification": {
+    "mild": {
+      "criteria": [
+        "Interstitial edema: Kerley B lines, peribronchial cuffing",
+        "Upper lobe pulmonary venous distension (cephalization)",
+        "Mild dyspnea on exertion only"
+      ],
+      "label": "Mild pulmonary edema — adjust medications"
+    },
+    "moderate": {
+      "criteria": [
+        "Alveolar edema: bilateral patchy opacities",
+        "Bilateral pleural effusions",
+        "Dyspnea at rest when supine (orthopnea)",
+        "SpO2 90-94%"
+      ],
+      "label": "Moderate pulmonary edema — urgent treatment"
+    },
+    "severe": {
+      "criteria": [
+        "Dense bilateral alveolar opacification (butterfly/bat wing pattern)",
+        "Severe respiratory distress",
+        "SpO2 <90%",
+        "Frothy pink sputum",
+        "Unable to lie flat"
+      ],
+      "label": "Acute pulmonary edema — emergency"
+    }
+  },
+  "common_causes": [
+    "Congestive heart failure (most common)",
+    "Acute myocardial infarction",
+    "Hypertensive emergency",
+    "Valvular heart disease",
+    "Fluid overload (renal failure, iatrogenic)",
+    "ARDS (non-cardiogenic)",
+    "High altitude pulmonary edema (HAPE)"
+  ],
+  "treatment": {
+    "mild": {
+      "setting": "outpatient / primary care",
+      "actions": [
+        "Optimize heart failure medications",
+        "Sodium restriction <2g/day",
+        "Fluid restriction 1.5L/day",
+        "Daily weight monitoring (alert if >1kg/day gain)",
+        "Follow-up in 1-2 weeks"
+      ],
+      "medications": [
+        {
+          "drug": "Furosemide",
+          "dose": "20-40mg",
+          "frequency": "once daily",
+          "route": "oral",
+          "class": "Loop diuretic"
+        },
+        {
+          "drug": "Enalapril",
+          "dose": "5-20mg",
+          "frequency": "twice daily",
+          "route": "oral",
+          "class": "ACE inhibitor"
+        }
+      ]
+    },
+    "moderate": {
+      "setting": "hospital",
+      "actions": [
+        "Sit patient upright (reduces preload)",
+        "Oxygen via face mask to maintain SpO2 >=94%",
+        "IV diuretics",
+        "Continuous monitoring of vitals and urine output",
+        "Identify and treat precipitant (infection, arrhythmia, non-compliance)"
+      ],
+      "medications": [
+        {
+          "drug": "Furosemide",
+          "dose": "40-80mg",
+          "frequency": "stat, repeat in 2h if needed",
+          "route": "IV",
+          "note": "Monitor urine output, target >0.5ml/kg/h"
+        },
+        {
+          "drug": "Glyceryl trinitrate (GTN)",
+          "dose": "0.5mg sublingual or 10-200mcg/min IV",
+          "indication": "If SBP >110mmHg",
+          "note": "Reduces preload"
+        }
+      ]
+    },
+    "severe": {
+      "setting": "emergency / ICU",
+      "actions": [
+        "Position: sitting upright, legs dangling",
+        "High-flow oxygen or non-invasive ventilation (CPAP/BiPAP)",
+        "IV furosemide 80-120mg stat",
+        "GTN infusion if blood pressure allows",
+        "Consider morphine 2-4mg IV for distress (caution: respiratory depression)",
+        "Urgent echocardiography if available",
+        "Intubation if no response to NIV"
+      ]
+    }
+  },
+  "referral": {
+    "immediate": [
+      "Acute pulmonary edema with SpO2 <90%",
+      "Cardiogenic shock (hypotension + pulmonary edema)",
+      "New onset pulmonary edema without known heart disease",
+      "No response to initial IV diuretics within 1 hour"
+    ],
+    "within_24h": [
+      "Recurrent episodes despite medication compliance",
+      "Need for echocardiography to guide management",
+      "Suspected non-cardiogenic cause (ARDS)"
+    ]
+  }
+}

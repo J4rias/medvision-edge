@@ -1,0 +1,130 @@
+{
+  "condition": "Cardiomegaly",
+  "icd10": "I51.7",
+  "source": "WHO Package of Essential NCD Interventions (PEN) / ESC Guidelines",
+  "description": "Enlarged heart on chest X-ray (cardiothoracic ratio >0.50 in adults, >0.55 in children)",
+  "classification": {
+    "mild": {
+      "criteria": [
+        "CTR 0.50-0.55 in adults",
+        "No symptoms of heart failure",
+        "Normal exercise tolerance"
+      ],
+      "label": "Mild cardiomegaly — monitor"
+    },
+    "moderate": {
+      "criteria": [
+        "CTR 0.55-0.65",
+        "Symptoms: exertional dyspnea, fatigue, peripheral edema",
+        "NYHA Class II-III"
+      ],
+      "label": "Moderate cardiomegaly — treat and refer"
+    },
+    "severe": {
+      "criteria": [
+        "CTR >0.65",
+        "Symptoms at rest: orthopnea, paroxysmal nocturnal dyspnea",
+        "NYHA Class III-IV",
+        "Signs of decompensated heart failure"
+      ],
+      "label": "Severe cardiomegaly — urgent referral"
+    }
+  },
+  "common_causes": [
+    "Hypertensive heart disease",
+    "Dilated cardiomyopathy",
+    "Valvular heart disease (rheumatic)",
+    "Ischemic heart disease",
+    "Pericardial effusion",
+    "Anemia (chronic, severe)",
+    "Cor pulmonale (from chronic lung disease)"
+  ],
+  "treatment": {
+    "mild": {
+      "setting": "primary care",
+      "actions": [
+        "Identify and treat underlying cause",
+        "Blood pressure control if hypertensive (target <130/80)",
+        "Lifestyle: sodium restriction <2g/day, regular exercise, weight management",
+        "Echocardiography if available"
+      ],
+      "medications": [
+        {
+          "drug": "Enalapril",
+          "dose": "5-20mg",
+          "frequency": "twice daily",
+          "indication": "First-line for hypertension with cardiomegaly"
+        },
+        {
+          "drug": "Amlodipine",
+          "dose": "5-10mg",
+          "frequency": "once daily",
+          "indication": "Add-on for blood pressure control"
+        }
+      ],
+      "follow_up": "Reassess in 1-3 months with repeat chest X-ray"
+    },
+    "moderate": {
+      "setting": "primary care with specialist referral",
+      "actions": [
+        "All mild measures plus:",
+        "Start heart failure medications",
+        "Refer for echocardiography (essential)",
+        "Daily weight monitoring",
+        "Fluid restriction 1.5-2L/day if symptomatic"
+      ],
+      "medications": [
+        {
+          "drug": "Enalapril",
+          "dose": "5-20mg",
+          "frequency": "twice daily",
+          "class": "ACE inhibitor"
+        },
+        {
+          "drug": "Bisoprolol",
+          "dose": "1.25-10mg",
+          "frequency": "once daily",
+          "class": "Beta-blocker",
+          "note": "Start low, titrate slowly"
+        },
+        {
+          "drug": "Furosemide",
+          "dose": "20-80mg",
+          "frequency": "once or twice daily",
+          "class": "Loop diuretic",
+          "indication": "For fluid overload symptoms"
+        }
+      ]
+    },
+    "severe": {
+      "setting": "hospital / referral facility",
+      "actions": [
+        "Urgent referral to cardiology",
+        "IV diuretics if decompensated",
+        "Oxygen if SpO2 <94%",
+        "Strict fluid balance monitoring",
+        "Investigate for reversible causes"
+      ]
+    }
+  },
+  "referral": {
+    "immediate": [
+      "Acute decompensated heart failure (pulmonary edema, severe dyspnea at rest)",
+      "Suspected pericardial tamponade",
+      "New onset atrial fibrillation with hemodynamic instability",
+      "Syncope with cardiomegaly"
+    ],
+    "within_1_week": [
+      "New finding of cardiomegaly without prior diagnosis",
+      "Moderate-severe cardiomegaly for echocardiography",
+      "Progressive symptoms despite initial treatment"
+    ]
+  },
+  "prevention": [
+    "Early detection and treatment of hypertension",
+    "Prevention of rheumatic heart disease (treat strep throat)",
+    "Diabetes management",
+    "Limit alcohol intake",
+    "Regular cardiovascular screening in high-risk populations"
+  ]
+}

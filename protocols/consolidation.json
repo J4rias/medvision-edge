@@ -1,0 +1,142 @@
+{
+  "condition": "Lung Consolidation",
+  "icd10": "J18.1",
+  "source": "WHO IMCI 2024 / WHO TB Guidelines 2024",
+  "description": "Area of lung tissue filled with fluid, pus, blood, or cells instead of air. Appears as dense opacity on chest X-ray with air bronchograms",
+  "classification": {
+    "mild": {
+      "criteria": [
+        "Focal consolidation in single lobe",
+        "No respiratory distress",
+        "Able to take oral medications",
+        "No danger signs"
+      ],
+      "label": "Lobar pneumonia — outpatient treatment"
+    },
+    "moderate": {
+      "criteria": [
+        "Multilobar consolidation",
+        "Moderate respiratory distress (RR elevated, mild hypoxia)",
+        "Associated pleural effusion",
+        "Comorbidities (diabetes, HIV, malnutrition)"
+      ],
+      "label": "Severe pneumonia with consolidation — inpatient"
+    },
+    "severe": {
+      "criteria": [
+        "Bilateral extensive consolidation",
+        "Severe respiratory failure (SpO2 <90%)",
+        "Sepsis signs (tachycardia, hypotension, altered mental status)",
+        "Lung abscess or cavitation"
+      ],
+      "label": "Critical — ICU / urgent referral"
+    }
+  },
+  "differential_diagnosis": [
+    {
+      "condition": "Bacterial pneumonia",
+      "clues": "Acute onset, fever, productive cough, focal consolidation",
+      "prevalence": "Most common cause"
+    },
+    {
+      "condition": "Pulmonary tuberculosis",
+      "clues": "Chronic cough >2 weeks, weight loss, night sweats, upper lobe predominance, cavitation",
+      "prevalence": "Very common in endemic areas — always consider"
+    },
+    {
+      "condition": "Lung malignancy",
+      "clues": "Persistent consolidation not responding to antibiotics, mass lesion, lymphadenopathy",
+      "prevalence": "Consider if no improvement after 6 weeks of treatment"
+    },
+    {
+      "condition": "Aspiration pneumonia",
+      "clues": "History of altered consciousness, dysphagia, right lower lobe involvement",
+      "prevalence": "Common in elderly, neurological patients"
+    }
+  ],
+  "treatment": {
+    "mild": {
+      "setting": "outpatient",
+      "first_line": {
+        "drug": "Amoxicillin",
+        "dose_mg_per_kg": 40,
+        "adult_dose": "500mg-1g",
+        "frequency": "three times daily",
+        "duration_days": 7,
+        "route": "oral"
+      },
+      "alternative": {
+        "drug": "Azithromycin",
+        "adult_dose": "500mg day 1, then 250mg",
+        "duration_days": 5,
+        "route": "oral",
+        "indication": "Penicillin allergy or atypical coverage"
+      },
+      "instructions": [
+        "Return in 48-72 hours for reassessment",
+        "Return immediately if worsening",
+        "Ensure adequate hydration"
+      ]
+    },
+    "moderate": {
+      "setting": "hospital",
+      "first_line": [
+        {
+          "drug": "Ampicillin",
+          "dose": "1-2g",
+          "frequency": "every 6 hours",
+          "route": "IV"
+        },
+        {
+          "drug": "Azithromycin",
+          "dose": "500mg",
+          "frequency": "once daily",
+          "route": "IV/oral",
+          "indication": "Atypical coverage"
+        }
+      ],
+      "if_tb_suspected": {
+        "action": "Collect 2 sputum samples for GeneXpert/AFB",
+        "note": "Do NOT start empiric TB treatment without microbiological evidence unless critically ill",
+        "treatment": "If confirmed: standard regimen 2HRZE/4HR"
+      }
+    },
+    "severe": {
+      "setting": "ICU / referral hospital",
+      "first_line": [
+        {
+          "drug": "Ceftriaxone",
+          "dose": "2g",
+          "frequency": "once daily",
+          "route": "IV"
+        },
+        {
+          "drug": "Azithromycin",
+          "dose": "500mg",
+          "frequency": "once daily",
+          "route": "IV"
+        }
+      ],
+      "actions": [
+        "Oxygen therapy to maintain SpO2 >=94%",
+        "Blood cultures before antibiotics if possible",
+        "Consider ICU if mechanical ventilation needed",
+        "CT chest if available and not responding to treatment"
+      ]
+    }
+  },
+  "referral": {
+    "immediate": [
+      "Bilateral consolidation with respiratory failure",
+      "Suspected lung abscess (cavitation + air-fluid level)",
+      "Septic shock with pneumonia",
+      "Massive hemoptysis"
+    ],
+    "within_1_week": [
+      "Non-resolving consolidation after 7 days antibiotics (rule out TB/malignancy)",
+      "Recurrent consolidation in same location",
+      "Need for CT chest or bronchoscopy"
+    ]
+  },
+  "tb_screening_note": "In areas with high TB prevalence, ANY consolidation persisting >2 weeks should trigger TB workup: sputum GeneXpert (preferred), smear microscopy, or chest X-ray follow-up. This is especially critical in HIV-positive patients where presentation may be atypical."
+}

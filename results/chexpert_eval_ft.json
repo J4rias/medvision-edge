@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-05-02T12:41:18.966125",
+  "benchmark": "CheXpert Test Set (Stanford)",
+  "ground_truth": "5 board-certified radiologist consensus",
+  "mode": "ft",
+  "model": "/home/joel/ml-projects/medvision/model_output/final_model",
+  "n_samples": 500,
+  "results": {
+    "Pneumonia": {
+      "n_samples": 500,
+      "n_positive": 11,
+      "n_negative": 489,
+      "tp": 7,
+      "tn": 179,
+      "fp": 310,
+      "fn": 4,
+      "accuracy": 0.372,
+      "sensitivity": 0.6364,
+      "specificity": 0.3661,
+      "auc": 0.5012
+    },
+    "Consolidation": {
+      "n_samples": 500,
+      "n_positive": 29,
+      "n_negative": 471,
+      "tp": 26,
+      "tn": 206,
+      "fp": 265,
+      "fn": 3,
+      "accuracy": 0.464,
+      "sensitivity": 0.8966,
+      "specificity": 0.4374,
+      "auc": 0.667
+    },
+    "Cardiomegaly": {
+      "n_samples": 500,
+      "n_positive": 151,
+      "n_negative": 349,
+      "tp": 99,
+      "tn": 276,
+      "fp": 73,
+      "fn": 52,
+      "accuracy": 0.75,
+      "sensitivity": 0.6556,
+      "specificity": 0.7908,
+      "auc": 0.7232
+    },
+    "Effusion": {
+      "n_samples": 500,
+      "n_positive": 104,
+      "n_negative": 396,
+      "tp": 99,
+      "tn": 254,
+      "fp": 142,
+      "fn": 5,
+      "accuracy": 0.706,
+      "sensitivity": 0.9519,
+      "specificity": 0.6414,
+      "auc": 0.7967
+    },
+    "Edema": {
+      "n_samples": 500,
+      "n_positive": 78,
+      "n_negative": 422,
+      "tp": 39,
+      "tn": 353,
+      "fp": 69,
+      "fn": 39,
+      "accuracy": 0.784,
+      "sensitivity": 0.5,
+      "specificity": 0.8365,
+      "auc": 0.6682
+    }
+  },
+  "nih_comparison": {
+    "Cardiomegaly": 0.832,
+    "Edema": 0.753,
+    "Effusion": 0.703,
+    "Pneumonia": 0.617,
+    "Consolidation": 0.627
+  }
+}

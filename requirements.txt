@@ -1,0 +1,10 @@
+torch>=2.0.0
+transformers>=4.45.0
+unsloth
+gradio>=4.0.0
+Pillow
+numpy
+scikit-learn
+pandas
+sentencepiece
+protobuf

@@ -1,0 +1,38 @@
+# Competition analysis (private)
+current-projects/
+CONTEXTO_HACKATHON_GEMMA4.md
+hackathon_official_rules.md
+
+# Training artifacts (on groundctl, not in repo)
+model_output*/
+data/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Results raw data (summarized in README)
+results/raw_responses_*.json
+results/chexpert_raw_responses_*.json
+results/*_comparison.json
+results/*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code memory (private)
+.claude/

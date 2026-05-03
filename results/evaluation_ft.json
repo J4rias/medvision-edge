@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-01T16:52:21.149523",
+  "mode": "ft",
+  "model": "/home/joel/ml-projects/medvision/model_output/final_model",
+  "results": {
+    "Pneumonia": {
+      "n_samples": 1102,
+      "n_positive": 151,
+      "n_negative": 951,
+      "tp": 50,
+      "tn": 811,
+      "fp": 140,
+      "fn": 101,
+      "accuracy": 0.7813,
+      "sensitivity": 0.3311,
+      "specificity": 0.8528,
+      "auc": 0.592
+    },
+    "Consolidation": {
+      "n_samples": 1103,
+      "n_positive": 231,
+      "n_negative": 872,
+      "tp": 35,
+      "tn": 821,
+      "fp": 51,
+      "fn": 196,
+      "accuracy": 0.7761,
+      "sensitivity": 0.1515,
+      "specificity": 0.9415,
+      "auc": 0.5465
+    },
+    "Cardiomegaly": {
+      "n_samples": 1103,
+      "n_positive": 213,
+      "n_negative": 890,
+      "tp": 174,
+      "tn": 737,
+      "fp": 153,
+      "fn": 39,
+      "accuracy": 0.8259,
+      "sensitivity": 0.8169,
+      "specificity": 0.8281,
+      "auc": 0.8225
+    },
+    "Effusion": {
+      "n_samples": 1102,
+      "n_positive": 347,
+      "n_negative": 755,
+      "tp": 229,
+      "tn": 569,
+      "fp": 186,
+      "fn": 118,
+      "accuracy": 0.7241,
+      "sensitivity": 0.6599,
+      "specificity": 0.7536,
+      "auc": 0.7068
+    },
+    "Edema": {
+      "n_samples": 1101,
+      "n_positive": 210,
+      "n_negative": 891,
+      "tp": 176,
+      "tn": 652,
+      "fp": 239,
+      "fn": 34,
+      "accuracy": 0.752,
+      "sensitivity": 0.8381,
+      "specificity": 0.7318,
+      "auc": 0.7849
+    }
+  },
+  "test_samples": 1103
+}

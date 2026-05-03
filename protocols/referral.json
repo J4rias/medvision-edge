@@ -1,0 +1,97 @@
+{
+  "source": "WHO IMCI 2024 / WHO Emergency Triage Assessment and Treatment (ETAT)",
+  "description": "Unified referral criteria based on chest X-ray findings and clinical assessment",
+  "urgency_levels": {
+    "emergency": {
+      "timeframe": "Immediate transfer (within 1 hour)",
+      "color": "red",
+      "criteria": [
+        "SpO2 <90% without available oxygen",
+        "Severe respiratory distress (nasal flaring, grunting, severe chest indrawing)",
+        "Altered consciousness or unable to drink",
+        "Suspected tension pneumothorax or massive effusion with mediastinal shift",
+        "Cardiogenic shock (hypotension + pulmonary edema)",
+        "Massive hemoptysis"
+      ],
+      "pre_transfer_actions": [
+        "Give first dose of antibiotics (IM ceftriaxone if available)",
+        "Start oxygen if available",
+        "Position patient upright if pulmonary edema",
+        "IV access if possible",
+        "Send referral note with X-ray findings"
+      ]
+    },
+    "urgent": {
+      "timeframe": "Within 24 hours",
+      "color": "orange",
+      "criteria": [
+        "Moderate respiratory distress not improving with initial treatment",
+        "New cardiomegaly with symptoms of heart failure",
+        "Bilateral pleural effusions requiring drainage",
+        "Suspected empyema (fever + effusion + sepsis)",
+        "Pneumonia not responding to 48h of first-line antibiotics",
+        "Suspected TB with danger signs"
+      ]
+    },
+    "routine": {
+      "timeframe": "Within 1-2 weeks",
+      "color": "yellow",
+      "criteria": [
+        "New cardiomegaly without acute symptoms (for echocardiography)",
+        "Non-resolving consolidation after full antibiotic course (rule out TB/malignancy)",
+        "Recurrent pleural effusion for investigation",
+        "Chronic cough >2 weeks with abnormal X-ray (TB workup)",
+        "Incidental findings requiring specialist evaluation"
+      ]
+    },
+    "follow_up": {
+      "timeframe": "4-6 weeks",
+      "color": "green",
+      "criteria": [
+        "Resolved pneumonia — confirm radiographic clearance",
+        "Mild cardiomegaly on treatment — reassess",
+        "Small effusion being managed medically — repeat imaging"
+      ]
+    }
+  },
+  "referral_by_finding": {
+    "pneumonia": {
+      "manage_locally": "Non-severe, responding to oral antibiotics, no danger signs",
+      "refer_urgent": "Severe (chest indrawing, SpO2 <94%), not improving at 48h",
+      "refer_emergency": "Very severe (danger signs, SpO2 <90%)"
+    },
+    "consolidation": {
+      "manage_locally": "Single lobe, responding to treatment",
+      "refer_urgent": "Multilobar, TB suspected, not resolving",
+      "refer_emergency": "Bilateral with respiratory failure, lung abscess"
+    },
+    "cardiomegaly": {
+      "manage_locally": "Mild (CTR 0.50-0.55), controlled hypertension",
+      "refer_urgent": "Moderate-severe, new diagnosis, symptoms of heart failure",
+      "refer_emergency": "Acute decompensated heart failure, suspected tamponade"
+    },
+    "effusion": {
+      "manage_locally": "Small, known cause (heart failure responding to diuretics)",
+      "refer_urgent": "Moderate-large, unknown cause, suspected TB/malignancy",
+      "refer_emergency": "Massive with respiratory failure, suspected empyema"
+    },
+    "edema": {
+      "manage_locally": "Mild interstitial, responding to diuretics",
+      "refer_urgent": "Moderate alveolar, not responding to treatment",
+      "refer_emergency": "Acute pulmonary edema with SpO2 <90%, cardiogenic shock"
+    }
+  },
+  "referral_note_template": {
+    "fields": [
+      "Patient name, age, sex",
+      "Date and time of assessment",
+      "Chief complaint and duration",
+      "Vital signs: HR, RR, BP, SpO2, Temperature",
+      "Chest X-ray findings (attach image if possible)",
+      "AI-assisted analysis results and confidence levels",
+      "Treatment given before transfer",
+      "Reason for referral",
+      "Urgency level"
+    ]
+  }
+}

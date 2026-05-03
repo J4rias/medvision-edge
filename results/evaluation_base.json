@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-05-01T19:58:05.561750",
+  "mode": "base",
+  "model": "unsloth/gemma-4-E4B-it",
+  "results": {
+    "Pneumonia": {
+      "n_samples": 1060,
+      "n_positive": 144,
+      "n_negative": 916,
+      "tp": 54,
+      "tn": 609,
+      "fp": 307,
+      "fn": 90,
+      "accuracy": 0.6255,
+      "sensitivity": 0.375,
+      "specificity": 0.6648,
+      "auc": 0.5199
+    },
+    "Consolidation": {
+      "n_samples": 1063,
+      "n_positive": 216,
+      "n_negative": 847,
+      "tp": 113,
+      "tn": 586,
+      "fp": 261,
+      "fn": 103,
+      "accuracy": 0.6576,
+      "sensitivity": 0.5231,
+      "specificity": 0.6919,
+      "auc": 0.6075
+    },
+    "Cardiomegaly": {
+      "n_samples": 1010,
+      "n_positive": 200,
+      "n_negative": 810,
+      "tp": 22,
+      "tn": 708,
+      "fp": 102,
+      "fn": 178,
+      "accuracy": 0.7228,
+      "sensitivity": 0.11,
+      "specificity": 0.8741,
+      "auc": 0.492
+    },
+    "Effusion": {
+      "n_samples": 1042,
+      "n_positive": 322,
+      "n_negative": 720,
+      "tp": 180,
+      "tn": 477,
+      "fp": 243,
+      "fn": 142,
+      "accuracy": 0.6305,
+      "sensitivity": 0.559,
+      "specificity": 0.6625,
+      "auc": 0.6108
+    },
+    "Edema": {
+      "n_samples": 1049,
+      "n_positive": 197,
+      "n_negative": 852,
+      "tp": 162,
+      "tn": 475,
+      "fp": 377,
+      "fn": 35,
+      "accuracy": 0.6072,
+      "sensitivity": 0.8223,
+      "specificity": 0.5575,
+      "auc": 0.6899
+    }
+  },
+  "test_samples": 1103
+}

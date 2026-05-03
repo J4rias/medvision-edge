@@ -1,0 +1,138 @@
+{
+  "condition": "Pneumonia",
+  "icd10": "J18.9",
+  "source": "WHO IMCI 2024 / WHO Guidelines for Pneumonia Management",
+  "classification": {
+    "mild": {
+      "criteria": [
+        "Fast breathing for age (>50/min if 2-12mo, >40/min if 1-5yr, >30/min if >5yr)",
+        "No chest indrawing",
+        "No danger signs"
+      ],
+      "label": "Non-severe pneumonia"
+    },
+    "moderate": {
+      "criteria": [
+        "Chest indrawing present",
+        "No danger signs"
+      ],
+      "label": "Severe pneumonia"
+    },
+    "severe": {
+      "criteria": [
+        "Any danger sign: stridor, inability to drink, convulsions, lethargy, severe malnutrition",
+        "Central cyanosis or SpO2 <90%"
+      ],
+      "label": "Very severe pneumonia"
+    }
+  },
+  "treatment": {
+    "mild": {
+      "first_line": {
+        "drug": "Amoxicillin",
+        "dose_mg_per_kg": 40,
+        "frequency": "twice daily",
+        "duration_days": 5,
+        "route": "oral"
+      },
+      "alternative": {
+        "drug": "Amoxicillin",
+        "dose_mg_per_kg": 25,
+        "frequency": "three times daily",
+        "duration_days": 5,
+        "route": "oral"
+      },
+      "setting": "outpatient",
+      "instructions": [
+        "Advise caregiver to return in 3 days for reassessment",
+        "Return immediately if child unable to drink, breathing worsens, or fever persists",
+        "Continue feeding and increase fluid intake"
+      ]
+    },
+    "moderate": {
+      "first_line": {
+        "drug": "Ampicillin",
+        "dose_mg_per_kg": 50,
+        "frequency": "every 6 hours",
+        "duration_days": 5,
+        "route": "IV/IM"
+      },
+      "step_down": {
+        "drug": "Amoxicillin",
+        "dose_mg_per_kg": 40,
+        "frequency": "twice daily",
+        "duration_days": 5,
+        "route": "oral",
+        "when": "After clinical improvement (typically 48-72 hours)"
+      },
+      "setting": "inpatient",
+      "instructions": [
+        "Admit to hospital",
+        "Monitor respiratory rate and oxygen saturation",
+        "Provide oxygen if SpO2 <90%",
+        "Reassess after 48 hours"
+      ]
+    },
+    "severe": {
+      "first_line": [
+        {
+          "drug": "Ampicillin",
+          "dose_mg_per_kg": 50,
+          "frequency": "every 6 hours",
+          "route": "IV"
+        },
+        {
+          "drug": "Gentamicin",
+          "dose_mg_per_kg": 7.5,
+          "frequency": "once daily",
+          "route": "IV/IM"
+        }
+      ],
+      "alternative": {
+        "drug": "Ceftriaxone",
+        "dose_mg_per_kg": 80,
+        "frequency": "once daily",
+        "duration_days": 10,
+        "route": "IV/IM"
+      },
+      "setting": "intensive care / referral hospital",
+      "instructions": [
+        "Urgent referral to facility with oxygen and IV capacity",
+        "Give first dose of antibiotics before transfer",
+        "Oxygen therapy to maintain SpO2 >=94%",
+        "Monitor for complications: empyema, sepsis, respiratory failure",
+        "If no improvement in 48h: switch to second-line antibiotics"
+      ]
+    }
+  },
+  "referral": {
+    "immediate": [
+      "SpO2 <90% without oxygen available",
+      "Inability to drink or breastfeed",
+      "Convulsions or altered consciousness",
+      "Severe chest indrawing with cyanosis",
+      "Severe malnutrition with pneumonia"
+    ],
+    "within_24h": [
+      "No improvement after 48h oral antibiotics",
+      "Worsening respiratory distress",
+      "New danger signs developing"
+    ]
+  },
+  "pediatric_dosage_table": {
+    "amoxicillin_oral": {
+      "weight_kg": [4, 6, 8, 10, 15, 20, 25, 30],
+      "dose_mg":   [160, 240, 320, 400, 500, 500, 500, 500],
+      "frequency": "twice daily",
+      "formulation": "250mg/5ml suspension or 500mg tablets"
+    }
+  },
+  "prevention": [
+    "Pneumococcal conjugate vaccine (PCV)",
+    "Haemophilus influenzae type b (Hib) vaccine",
+    "Measles vaccination",
+    "Adequate nutrition and exclusive breastfeeding for 6 months",
+    "Reduce indoor air pollution (clean cooking fuels)",
+    "Handwashing with soap"
+  ]
+}
