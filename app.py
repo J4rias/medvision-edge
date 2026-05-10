@@ -302,12 +302,29 @@ CUSTOM_CSS = """
 
 EXTRA_HEAD = """
 <script>
-// Scroll to top when an example is clicked
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.gallery, .examples')) {
-        setTimeout(function() { window.scrollTo({top: 0, behavior: 'smooth'}); }, 500);
+// Scroll to xray-input when an example image is clicked
+function scrollToXray() {
+    var el = document.getElementById('xray-input');
+    if (!el) return;
+    // HF Spaces runs inside an iframe — use parentIFrame API if available
+    if ('parentIFrame' in window) {
+        var rect = el.getBoundingClientRect();
+        window.parentIFrame.scrollToOffset(0, rect.top - 20);
+    } else {
+        el.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
-});
+}
+document.addEventListener('click', function(e) {
+    var t = e.target;
+    for (var i = 0; i < 10 && t && t !== document.body; i++, t = t.parentElement) {
+        var cls = (t.className || '') + ' ' + (t.id || '');
+        if (cls.toLowerCase().indexOf('example') !== -1) {
+            setTimeout(scrollToXray, 800);
+            setTimeout(scrollToXray, 1500);
+            return;
+        }
+    }
+}, true);
 
 // Force rear camera: override getUserMedia to prefer environment facingMode
 (function() {
@@ -342,6 +359,7 @@ with demo:
                 type="pil",
                 label="Upload Chest X-ray",
                 sources=["upload", "webcam"],
+                elem_id="xray-input",
                 webcam_options=gr.WebcamOptions(
                     mirror=False,
                     constraints={"facingMode": {"ideal": "environment"}},
