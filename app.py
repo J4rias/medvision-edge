@@ -300,7 +300,7 @@ CUSTOM_CSS = """
 }
 """
 
-SCROLL_JS = """
+EXTRA_HEAD = """
 <script>
 // Scroll to top when an example is clicked
 document.addEventListener('click', function(e) {
@@ -308,6 +308,21 @@ document.addEventListener('click', function(e) {
         setTimeout(function() { window.scrollTo({top: 0, behavior: 'smooth'}); }, 500);
     }
 });
+
+// Force rear camera: override getUserMedia to prefer environment facingMode
+(function() {
+    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    navigator.mediaDevices.getUserMedia = function(constraints) {
+        if (constraints && constraints.video && typeof constraints.video === 'object') {
+            if (!constraints.video.deviceId) {
+                constraints.video.facingMode = {ideal: 'environment'};
+            }
+        } else if (constraints && constraints.video === true) {
+            constraints.video = {facingMode: {ideal: 'environment'}};
+        }
+        return original(constraints);
+    };
+})();
 </script>
 """
 
@@ -315,7 +330,7 @@ demo = gr.Blocks(
     title="MedVision Edge",
     theme=gr.themes.Soft(),
     css=CUSTOM_CSS,
-    head='<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">' + SCROLL_JS,
+    head='<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">' + EXTRA_HEAD,
 )
 
 with demo:
