@@ -2,7 +2,7 @@
 MedVision Edge — Offline Chest X-ray Analysis
 Gradio demo for Gemma 4 E4B fine-tuned on 112K+ chest X-rays.
 
-Deploy: HuggingFace Space (GPU T4) or local with `python app.py`
+Deploy: HuggingFace Space (ZeroGPU) or local with `python app.py`
 """
 
 import os
@@ -10,17 +10,18 @@ import re
 import json
 import torch
 import gradio as gr
+import spaces
 from PIL import Image
 from pathlib import Path
+from transformers import AutoProcessor, AutoModelForImageTextToText, BitsAndBytesConfig
 
 # ── Config ──────────────────────────────────────────────────────
-# HF Space: set MEDVISION_MODEL env var to HF repo ID (e.g., "user/medvision-edge-v4")
-# Local: defaults to local path on groundctl
 MODEL_PATH = os.environ.get(
     "MEDVISION_MODEL",
     os.path.expanduser("~/ml-projects/medvision/model_output/final_model"),
 )
-LOAD_IN_4BIT = os.environ.get("MEDVISION_4BIT", "true").lower() == "true"
+IS_SPACES = os.environ.get("SPACE_ID") is not None
+LOAD_IN_4BIT = os.environ.get("MEDVISION_4BIT", "true").lower() == "true" and not IS_SPACES
 PATHOLOGIES = ["Pneumonia", "Consolidation", "Cardiomegaly", "Effusion", "Edema"]
 
 LANGUAGES = {
@@ -47,25 +48,30 @@ TRANSLATE_PROMPT = (
     "Keep medical terminology accurate. Translate only, do not add commentary.\n\n{text}"
 )
 
-# ── Globals (loaded once) ───────────────────────────────────────
-model = None
-processor = None
+# ── Model loading ─────────────────────────────────────────────
+# ZeroGPU: load on CPU at module level, ZeroGPU moves to GPU automatically
+# Local: load with device_map="auto" (optionally 4-bit)
+print(f"Loading model from {MODEL_PATH} (spaces={IS_SPACES}, 4bit={LOAD_IN_4BIT})...")
 
-
-def load_model():
-    global model, processor
-    if model is not None:
-        return
-
-    from unsloth import FastVisionModel
-
-    print(f"Loading model from {MODEL_PATH} (4bit={LOAD_IN_4BIT})...")
-    model, processor = FastVisionModel.from_pretrained(
+if LOAD_IN_4BIT:
+    model = AutoModelForImageTextToText.from_pretrained(
         MODEL_PATH,
-        load_in_4bit=LOAD_IN_4BIT,
+        quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_quant_type="nf4",
+        ),
+        device_map="auto",
     )
-    FastVisionModel.for_inference(model)
-    print("Model loaded.")
+else:
+    model = AutoModelForImageTextToText.from_pretrained(
+        MODEL_PATH,
+        torch_dtype=torch.float16,
+    )
+
+model.eval()
+processor = AutoProcessor.from_pretrained(MODEL_PATH)
+print("Model loaded.")
 
 
 def parse_response(response: str) -> dict:
@@ -120,6 +126,8 @@ def run_inference(image: Image.Image, prompt: str) -> str:
         return_tensors="pt",
     ).to(model.device)
 
+    print(f"Inference on device: {model.device}, dtype: {model.dtype}")
+
     with torch.no_grad():
         output = model.generate(
             **inputs,
@@ -130,6 +138,7 @@ def run_inference(image: Image.Image, prompt: str) -> str:
         )
 
     decoded = processor.batch_decode(output, skip_special_tokens=True)[0]
+    print(f"Raw decoded (first 500 chars): {decoded[:500]}")
     # Extract only the assistant's response (handle multiple Gemma 4 marker formats)
     for marker in ["<|turn>model", "<start_of_turn>model", "model\n"]:
         if marker in decoded:
@@ -142,12 +151,18 @@ def run_inference(image: Image.Image, prompt: str) -> str:
     return decoded.strip()
 
 
+@spaces.GPU
 def analyze_xray(image, language, patient_age, patient_weight):
     """Main analysis function for Gradio interface."""
     if image is None:
         return "Please upload a chest X-ray image.", "{}", "", ""
 
-    load_model()
+    # Move model to GPU if not already there (ZeroGPU assigns GPU when entering @spaces.GPU)
+    if IS_SPACES and not next(model.parameters()).is_cuda:
+        model.to("cuda")
+        print(f"Model moved to cuda (first request)")
+    elif IS_SPACES:
+        print(f"Model already on cuda (cached)")
 
     # Convert to PIL if needed
     if not isinstance(image, Image.Image):
@@ -209,7 +224,8 @@ def analyze_xray(image, language, patient_age, patient_weight):
             translated = translated.split(translate_prompt)[-1]
         translated = translated.strip()
 
-    return raw_response, findings_display, clinical_summary, translated
+    findings_text = "\n".join(f"{k}: {v}" for k, v in findings_display.items())
+    return raw_response, findings_text, clinical_summary, translated
 
 
 # ── Gradio UI ───────────────────────────────────────────────────
@@ -264,13 +280,42 @@ CUSTOM_CSS = """
 @keyframes medvision-spin {
     to { transform: rotate(360deg); }
 }
+/* Responsive expected results cards */
+.expected-results .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    margin: 8px 0;
+}
+.expected-results .card {
+    background: var(--block-background-fill);
+    border: 1px solid var(--block-border-color);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.85em;
+}
+.expected-results .card strong {
+    display: block;
+    margin-bottom: 4px;
+}
+"""
+
+SCROLL_JS = """
+<script>
+// Scroll to top when an example is clicked
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.gallery, .examples')) {
+        setTimeout(function() { window.scrollTo({top: 0, behavior: 'smooth'}); }, 500);
+    }
+});
+</script>
 """
 
 demo = gr.Blocks(
     title="MedVision Edge",
     theme=gr.themes.Soft(),
     css=CUSTOM_CSS,
-    head='<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">',
+    head='<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">' + SCROLL_JS,
 )
 
 with demo:
@@ -278,7 +323,15 @@ with demo:
 
     with gr.Row():
         with gr.Column(scale=1):
-            image_input = gr.Image(type="pil", label="Upload Chest X-ray")
+            image_input = gr.Image(
+                type="pil",
+                label="Upload Chest X-ray",
+                sources=["upload", "webcam"],
+                webcam_options=gr.WebcamOptions(
+                    mirror=False,
+                    constraints={"facingMode": "environment"},
+                ),
+            )
             language_input = gr.Dropdown(
                 choices=list(LANGUAGES.keys()),
                 value="English",
@@ -290,7 +343,7 @@ with demo:
             analyze_btn = gr.Button("🔍 Analyze X-ray", variant="primary", size="lg")
 
         with gr.Column(scale=2):
-            findings_output = gr.JSON(label="Findings")
+            findings_output = gr.Textbox(label="Findings", lines=6)
             raw_output = gr.Textbox(label="Model Analysis (raw)", lines=10)
             protocol_output = gr.Markdown(label="Clinical Protocol (WHO IMCI)")
             translated_output = gr.Markdown(label="Translated Report")
@@ -299,6 +352,32 @@ with demo:
         fn=analyze_xray,
         inputs=[image_input, language_input, age_input, weight_input],
         outputs=[raw_output, findings_output, protocol_output, translated_output],
+    )
+
+    gr.HTML("""
+<div class="expected-results">
+<h3>Example chest X-rays — Expected results</h3>
+<p style="font-size:0.85em;color:var(--body-text-color-subdued);">CheXpert test set, radiologist-verified</p>
+<div class="card-grid">
+  <div class="card"><strong>1. Normal</strong>All clear — no pathology detected</div>
+  <div class="card"><strong>2. Cardiomegaly</strong>Cardiomegaly: DETECTED</div>
+  <div class="card"><strong>3. Effusion</strong>Effusion: DETECTED</div>
+  <div class="card"><strong>4. Edema</strong>Edema: DETECTED</div>
+  <div class="card"><strong>5. Multiple</strong>Pneumonia: DETECTED<br>Consolidation: DETECTED<br>Effusion: DETECTED</div>
+</div>
+</div>
+""")
+
+    gr.Examples(
+        examples=[
+            ["examples/example1_normal.jpg", "English", 35, 70],
+            ["examples/example2_cardiomegaly.jpg", "English", 62, 85],
+            ["examples/example3_effusion.jpg", "English", 55, 75],
+            ["examples/example4_edema.jpg", "Spanish", 70, 80],
+            ["examples/example5_multiple.jpg", "English", 58, 72],
+        ],
+        inputs=[image_input, language_input, age_input, weight_input],
+        label="Click an example to load it",
     )
 
     gr.Markdown(ARTICLE)
