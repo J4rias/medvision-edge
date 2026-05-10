@@ -329,7 +329,7 @@ with demo:
                 sources=["upload", "webcam"],
                 webcam_options=gr.WebcamOptions(
                     mirror=False,
-                    constraints={"facingMode": "environment"},
+                    constraints={"facingMode": {"ideal": "environment"}},
                 ),
             )
             language_input = gr.Dropdown(
