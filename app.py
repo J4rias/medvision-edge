@@ -170,6 +170,14 @@ def analyze_xray(image, language, patient_age, patient_weight):
     else:
         image = image.convert("RGB")
 
+    # Resize large images (phone photos can be 12MP+)
+    MAX_DIM = 1024
+    w, h = image.size
+    if max(w, h) > MAX_DIM:
+        scale = MAX_DIM / max(w, h)
+        image = image.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
+        print(f"Image resized: {w}x{h} -> {image.size[0]}x{image.size[1]}")
+
     # 1. Run X-ray analysis
     raw_response = run_inference(image, EVAL_PROMPT)
 
@@ -302,18 +310,90 @@ CUSTOM_CSS = """
 
 EXTRA_HEAD = """
 <script>
-// Force rear camera: override getUserMedia to prefer environment facingMode
+// Force rear camera + limit resolution to 1024px
 (function() {
-    const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+    var original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     navigator.mediaDevices.getUserMedia = function(constraints) {
-        if (constraints && constraints.video && typeof constraints.video === 'object') {
+        if (constraints && constraints.video === true) {
+            constraints.video = {};
+        }
+        if (constraints && typeof constraints.video === 'object') {
             if (!constraints.video.deviceId) {
                 constraints.video.facingMode = {ideal: 'environment'};
             }
-        } else if (constraints && constraints.video === true) {
-            constraints.video = {facingMode: {ideal: 'environment'}};
+            constraints.video.width = {ideal: 1024};
+            constraints.video.height = {ideal: 1024};
         }
         return original(constraints);
+    };
+})();
+
+// Client-side image resize: intercept Gradio upload to compress large images
+(function() {
+    var MAX = 1024, QUALITY = 0.85;
+    function resizeBlob(blob) {
+        return new Promise(function(resolve) {
+            if (!blob || blob.size < 200000) return resolve(blob);
+            var type = blob.type || '';
+            if (!type.startsWith('image/')) return resolve(blob);
+            var img = new Image();
+            img.onload = function() {
+                if (img.width <= MAX && img.height <= MAX) {
+                    URL.revokeObjectURL(img.src);
+                    return resolve(blob);
+                }
+                var scale = MAX / Math.max(img.width, img.height);
+                var c = document.createElement('canvas');
+                c.width = Math.round(img.width * scale);
+                c.height = Math.round(img.height * scale);
+                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                URL.revokeObjectURL(img.src);
+                c.toBlob(function(b) {
+                    resolve(b);
+                }, 'image/jpeg', QUALITY);
+            };
+            img.src = URL.createObjectURL(blob);
+        });
+    }
+    // Intercept XMLHttpRequest (Gradio uses this for uploads)
+    var origSend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function(body) {
+        var xhr = this;
+        if (body instanceof FormData) {
+            var promises = [];
+            var entries = Array.from(body.entries());
+            for (var i = 0; i < entries.length; i++) {
+                (function(key, val) {
+                    if (val instanceof Blob && (val.type || '').startsWith('image/')) {
+                        promises.push(resizeBlob(val).then(function(r) {
+                            if (r !== val) body.set(key, r, 'image.jpg');
+                        }));
+                    }
+                })(entries[i][0], entries[i][1]);
+            }
+            if (promises.length > 0) {
+                Promise.all(promises).then(function() {
+                    origSend.call(xhr, body);
+                });
+                return;
+            }
+        }
+        origSend.call(xhr, body);
+    };
+    // Also intercept fetch
+    var origFetch = window.fetch;
+    window.fetch = async function(url, opts) {
+        if (opts && opts.body instanceof FormData) {
+            var entries = Array.from(opts.body.entries());
+            for (var i = 0; i < entries.length; i++) {
+                var key = entries[i][0], val = entries[i][1];
+                if (val instanceof Blob && (val.type || '').startsWith('image/')) {
+                    var resized = await resizeBlob(val);
+                    if (resized !== val) opts.body.set(key, resized, 'image.jpg');
+                }
+            }
+        }
+        return origFetch.apply(this, arguments);
     };
 })();
 </script>
