@@ -66,7 +66,7 @@ if LOAD_IN_4BIT:
 else:
     model = AutoModelForImageTextToText.from_pretrained(
         MODEL_PATH,
-        torch_dtype=torch.float16,
+        dtype=torch.float16,
     )
 
 model.eval()
@@ -302,30 +302,6 @@ CUSTOM_CSS = """
 
 EXTRA_HEAD = """
 <script>
-// Scroll to xray-input when an example image is clicked
-function scrollToXray() {
-    var el = document.getElementById('xray-input');
-    if (!el) return;
-    // HF Spaces runs inside an iframe — use parentIFrame API if available
-    if ('parentIFrame' in window) {
-        var rect = el.getBoundingClientRect();
-        window.parentIFrame.scrollToOffset(0, rect.top - 20);
-    } else {
-        el.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-}
-document.addEventListener('click', function(e) {
-    var t = e.target;
-    for (var i = 0; i < 10 && t && t !== document.body; i++, t = t.parentElement) {
-        var cls = (t.className || '') + ' ' + (t.id || '');
-        if (cls.toLowerCase().indexOf('example') !== -1) {
-            setTimeout(scrollToXray, 800);
-            setTimeout(scrollToXray, 1500);
-            return;
-        }
-    }
-}, true);
-
 // Force rear camera: override getUserMedia to prefer environment facingMode
 (function() {
     const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
