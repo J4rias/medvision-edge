@@ -2,6 +2,8 @@
 
 AI-powered chest X-ray screening for underserved communities, using **Gemma 4 E4B** fine-tuned on 112K+ radiographs. Runs entirely offline on consumer hardware.
 
+**Video Demo:** https://youtu.be/VFHtjTz7u2U
+
 ## The Problem
 
 - **2.2 billion people** lack access to diagnostic imaging (WHO 2023)
@@ -23,20 +25,22 @@ MedVision Edge brings AI radiology screening to the 7M+ rural health workers who
 
 Validated on two independent benchmarks with real clinical images:
 
-| Pathology | NIH ChestX-ray14 AUC (N=1,103) | CheXpert Gold Standard AUC (N=500) | vs Gemma 4 Baseline |
-|-----------|--------------------------------|-------------------------------------|---------------------|
-| Cardiomegaly | **0.832** | 0.723 | **+70%** |
-| Pleural Effusion | 0.703 | **0.797** | +16% |
-| Pulmonary Edema | **0.753** | 0.668 | +9% |
-| Consolidation | 0.627 | **0.667** | +5% |
-| Pneumonia | 0.617 | — | +19% |
+| Pathology | Base AUC | Fine-tuned AUC (N=1,103) | CheXpert Gold Std (N=500) | Δ vs Base |
+|-----------|----------|--------------------------|---------------------------|-----------|
+| Cardiomegaly | 0.490 | **0.832** | 0.723 | **+70%** |
+| Pleural Effusion | 0.605 | 0.703 | **0.797** | +16% |
+| Pulmonary Edema | 0.688 | **0.753** | 0.668 | +9% |
+| Consolidation | 0.599 | 0.627 | **0.667** | +5% |
+| Pneumonia | 0.519 | **0.617** | 0.501* | +19% |
 
-*CheXpert test set uses consensus labels from 5 board-certified radiologists (Stanford).*
+*Base AUC: unmodified Gemma 4 (zero-shot). Fine-tuned AUC: our model, evaluated on 1,103 held-out NIH images. CheXpert: same model evaluated on 500 independent images with 5-radiologist consensus labels (Stanford).*
+
+*\*Pneumonia CheXpert: only 11 positives (2.2% prevalence) — insufficient statistical power. Pneumonia detection remains under active development.*
 
 ### Key achievements
 
 - Fine-tuned model detects pathologies the base model completely misses (Cardiomegaly: base AUC 0.490 vs ours 0.832)
-- Sensitivity >0.65 across all pathologies — the model reads images, not just text patterns
+- Sensitivity >0.63 across all pathologies — the model reads images, not just text patterns
 - Effusion AUC 0.797 on gold standard benchmark with 95.2% sensitivity
 - All results reproducible with provided scripts and public datasets
 
@@ -63,7 +67,7 @@ Protocol   Tables   Urgency
 
 - **Base model**: `unsloth/gemma-4-E4B-it` (6.3B params)
 - **Fine-tuning**: QLoRA with Unsloth (r=64, 82M trainable params = 1.3% of total)
-- **Training data**: NIH ChestX-ray14 — 112,120 images, 5 pathologies
+- **Training data**: NIH ChestX-ray14 (112,120 image dataset), ~23K training samples with 5x oversampling and augmentation
 - **Training**: 2 epochs, lr 1e-4, gradient accumulation 8, data augmentation
 - **Hardware**: NVIDIA RTX 5070 Ti 16GB (~43h total GPU time)
 - **Deployment**: 5GB GGUF via Ollama (text) or Gradio with transformers (vision)
@@ -138,10 +142,45 @@ python scripts/eval_chexpert.py --mode ft
 | Priority countries | India, Nigeria, Bangladesh, Ethiopia, Indonesia |
 | Languages supported | 140+ (native Gemma 4) |
 
+## Error Analysis & Failure Modes
+
+- **Pneumonia false positives (382 FP)**: NLP-extracted training labels propagate noise. Under active development.
+- **Low-quality images**: Degraded performance on poor contrast, rotation artifacts, or non-standard positioning.
+- **Subtle findings**: Best on moderate-to-large findings; small effusions and early edema are harder to detect.
+- **Lateral views**: Not supported — trained exclusively on frontal (PA/AP) X-rays.
+
+## Ethical Considerations
+
+- **Bias**: Training data is predominantly US adult population. Preliminary testing with adults from Venezuela, Colombia, Argentina, and Peru shows positive results — validation with larger Latin American cohorts ongoing.
+- **Privacy**: All processing on-device or ephemeral GPU sessions. No images stored or transmitted.
+- **Regulatory**: Not FDA-cleared or CE-marked. Intended for resource-limited settings where no radiology access exists.
+- **Transparency**: Interface clearly states AI screening tool — radiologist confirmation required.
+
+## Comparison with SOTA
+
+| Model | Type | Cardiomegaly | Effusion | Params |
+|-------|------|:------------:|:--------:|:------:|
+| CheXNet (DenseNet-121) | CNN classifier | 0.925 | 0.864 | 8M |
+| **MedVision Edge (ours)** | **VLM + protocols** | **0.832** | **0.797** | **6.3B (82M trained)** |
+
+SOTA models are single-task classifiers. MedVision Edge is a multimodal VLM that also generates reports, supports 140+ languages, and provides WHO treatment protocols.
+
+## Inference Latency
+
+| Environment | Hardware | Time per image |
+|-------------|----------|:--------------:|
+| HuggingFace Space | A10G (ZeroGPU) | ~20-45s |
+| Local GPU | RTX 5070 Ti 16GB | ~25s |
+| Ollama (text-only) | CPU 8GB RAM | ~3-5s |
+
+## Cost to Reproduce
+
+Total pipeline from raw data to deployed model: **< $25** in cloud compute (A100 spot pricing). All datasets are free and public.
+
 ## Limitations
 
 - **AI screening tool only** — not for clinical diagnosis without radiologist confirmation
-- Pneumonia detection has high false positive rate (AUC 0.617) due to noisy NLP-extracted labels in training data
+- Pneumonia detection has high false positive rate (AUC 0.617) due to noisy NLP-extracted labels — under active development
 - Vision via GGUF/Ollama not yet supported (llama.cpp limitation for multimodal Gemma 4)
 - Trained on adult chest X-rays only; pediatric performance not validated
 

@@ -1,6 +1,6 @@
 """
 MedVision Edge — Offline Chest X-ray Analysis
-Gradio demo for Gemma 4 E4B fine-tuned on 112K+ chest X-rays.
+Gradio demo for Gemma 4 E4B fine-tuned on NIH ChestX-ray14.
 
 Deploy: HuggingFace Space (ZeroGPU) or local with `python app.py`
 """
@@ -240,20 +240,23 @@ def analyze_xray(image, language, patient_age, patient_weight):
 DESCRIPTION = """
 # MedVision Edge — Offline Chest X-ray Analysis
 
-**AI-powered chest X-ray screening** using Gemma 4 E4B fine-tuned on 112K+ radiographs.
+**AI-powered chest X-ray screening** using Gemma 4 E4B fine-tuned on NIH ChestX-ray14 (~23K training samples with 5x oversampling).
 
 Detects 5 pathologies: **Pneumonia, Consolidation, Cardiomegaly, Pleural Effusion, Pulmonary Edema**
 
 ### Validated on two independent benchmarks
 
-| Pathology | NIH ChestX-ray14 AUC | CheXpert Gold Standard AUC | vs Baseline |
-|-----------|----------------------|---------------------------|-------------|
-| Cardiomegaly | **0.832** | 0.723 | +70% |
-| Pleural Effusion | 0.703 | **0.797** | +16% |
-| Pulmonary Edema | **0.753** | 0.668 | +9% |
-| Consolidation | 0.627 | **0.667** | +5% |
+| Pathology | Base AUC | Fine-tuned AUC | CheXpert (Gold Std) | Δ vs Base |
+|-----------|----------|----------------|---------------------|-----------|
+| Cardiomegaly | 0.490 | **0.832** | 0.723 | +70% |
+| Pleural Effusion | 0.605 | 0.703 | **0.797** | +16% |
+| Pulmonary Edema | 0.688 | **0.753** | 0.668 | +9% |
+| Consolidation | 0.599 | 0.627 | **0.667** | +5% |
+| Pneumonia | 0.519 | **0.617** | 0.501* | +19% |
 
-*CheXpert test set: 500 images, 5 board-certified radiologist consensus (Stanford)*
+*Base AUC: unmodified Gemma 4 (zero-shot). Fine-tuned AUC: our model, evaluated on 1,103 held-out NIH images. CheXpert: same model evaluated on 500 independent images with 5-radiologist consensus labels (Stanford).*
+
+*\\*Pneumonia: insufficient CheXpert prevalence (2.2%). Detection under active development.*
 
 > **AI screening tool only.** Not for clinical diagnosis. All findings must be confirmed by a qualified radiologist.
 """
@@ -261,7 +264,7 @@ Detects 5 pathologies: **Pneumonia, Consolidation, Cardiomegaly, Pleural Effusio
 ARTICLE = """
 ### About MedVision Edge
 - **Model**: Gemma 4 E4B-it, fine-tuned with Unsloth QLoRA (r=64, 82M trainable params)
-- **Training data**: NIH ChestX-ray14 (112K images, 5 pathologies, 2 epochs)
+- **Training data**: NIH ChestX-ray14 (112,120 image dataset), ~23K training samples with 5x oversampling and augmentation
 - **Evaluation**: NIH test set (1,103 images) + CheXpert gold standard (500 images, 5 radiologist consensus)
 - **Protocols**: WHO IMCI 2024 clinical guidelines (deterministic function calling, zero hallucination)
 - **Languages**: 140+ supported natively by Gemma 4
