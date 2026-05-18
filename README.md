@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="assets/banner.jpg" alt="MedVision Edge — AI Radiology for Everyone" width="100%">
+</p>
+
 # MedVision Edge — Offline Chest X-ray Analysis
 
-AI-powered chest X-ray screening for underserved communities, using **Gemma 4 E4B** fine-tuned on 112K+ radiographs. Runs entirely offline on consumer hardware.
+AI-powered chest X-ray screening for underserved communities, using **Gemma 4 E4B** fine-tuned on ~23K radiographs from NIH ChestX-ray14 (112K-image dataset, with capacity for further scaling). Runs entirely offline on consumer hardware.
 
 **Video Demo:** https://youtu.be/VFHtjTz7u2U
 
@@ -8,6 +12,7 @@ AI-powered chest X-ray screening for underserved communities, using **Gemma 4 E4
 
 - **2.2 billion people** lack access to diagnostic imaging (WHO 2023)
 - **1 radiologist per 1M inhabitants** in sub-Saharan Africa
+- Similar shortages across rural Latin America, South Asia, and the Pacific Islands
 - **740,000 children under 5** die from pneumonia annually, many preventable with early diagnosis
 - Cloud-based ML costs $0.03-0.10/image — unaffordable without internet
 
@@ -46,21 +51,18 @@ Validated on two independent benchmarks with real clinical images:
 
 ## Architecture
 
-```
-Chest X-ray Image
-       |
-       v
-[Gemma 4 E4B + QLoRA r=64]  ← Fine-tuned vision model (5GB quantized)
-       |
-       v
-[Response Parser]             ← Regex-based YES/NO extraction per pathology
-       |
-       v
-[WHO IMCI Protocol Engine]    ← Deterministic JSON lookup (zero hallucination)
-  |         |          |
-  v         v          v
-Treatment  Dosing   Referral
-Protocol   Tables   Urgency
+```mermaid
+flowchart TD
+    A[🩻 Chest X-ray Image] --> B[Gemma 4 E4B + QLoRA r=64]
+    B -->|Raw text output| C[Response Parser]
+    C -->|YES/NO per pathology| D[WHO IMCI Protocol Engine]
+    D --> E[Treatment Protocol]
+    D --> F[Dosing Tables]
+    D --> G[Referral Urgency]
+
+    B -.- B1(Fine-tuned vision model · 5GB quantized)
+    C -.- C1(Regex-based extraction)
+    D -.- D1(Deterministic JSON lookup · zero hallucination)
 ```
 
 ## Technical Details
