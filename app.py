@@ -271,7 +271,7 @@ ARTICLE = """
 - **Deployment**: Runs offline on consumer GPU (5GB GGUF via Ollama) or this Gradio demo
 - **GPU used**: ~43h on NVIDIA RTX 5070 Ti 16GB (training + evaluation)
 
-Built for the [Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good) | Apache 2.0
+Born at the [Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good) | Apache 2.0
 """
 
 CUSTOM_CSS = """

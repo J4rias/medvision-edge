@@ -200,4 +200,4 @@ Apache 2.0
 
 ---
 
-Built for the [Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good)
+Born at the [Gemma 4 Good Hackathon](https://kaggle.com/competitions/gemma-4-good) | Apache 2.0
