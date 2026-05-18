@@ -291,6 +291,19 @@ CUSTOM_CSS = """
 @keyframes medvision-spin {
     to { transform: rotate(360deg); }
 }
+/* Mobile: horizontal scroll for markdown tables */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    table th, table td {
+        white-space: nowrap;
+        font-size: 0.78em;
+        padding: 4px 6px !important;
+    }
+}
 /* Responsive expected results cards */
 .expected-results .card-grid {
     display: grid;
